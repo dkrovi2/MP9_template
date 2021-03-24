@@ -1,5 +1,6 @@
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.SparkSession;
 
@@ -13,18 +14,9 @@ public final class MP3_PartA {
     JavaSparkContext sc = new JavaSparkContext(spark.sparkContext());
     SQLContext sqlContext = new SQLContext(sc);
     Dataset<?> dataset = FileLoader.loadData(sc, sqlContext);
-    dataset.printSchema();
-    /*
-     * 1. Setup (10 points): Download the gbook file and write a function
-     * to load it in an RDD & DataFrame
-     */
-
-    // RDD API
-    // Columns: 0: place (string), 1: count1 (int), 2: count2 (int), 3: count3 (int)
-
-
-    // Spark SQL - DataSet API
-
+    dataset.createOrReplaceTempView("gbooks");
+    Dataset<Row> result = spark.sql("SELECT word, count1, count2, count3 from gbooks");
+    result.printSchema();
 
     // Finish up
     spark.stop();
