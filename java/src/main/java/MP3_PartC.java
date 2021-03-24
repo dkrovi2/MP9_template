@@ -30,6 +30,11 @@ public final class MP3_PartC {
       .getOrCreate();
     JavaSparkContext sc = new JavaSparkContext(spark.sparkContext());
     SQLContext sqlContext = new SQLContext(sc);
+    Dataset<?> dataset = FileLoader.loadData(sc, sqlContext);
+    dataset.createOrReplaceTempView("gbooks");
+
+    Dataset<Row> countDF = spark.sql("SELECT count(*) FROM gbooks where word = 'ATTRIBUTE'");
+    countDF.show();
     /*
      * 1. Setup (10 points): Download the gbook file and write a function 
      * to load it in an RDD & DataFrame
